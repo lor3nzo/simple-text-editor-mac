@@ -1,8 +1,8 @@
-# Simple Text Editor Mac
+# SimpleTextEditor
 
-A minimal plain-text editor for macOS, built with SwiftUI for distraction-free writing. It focuses on the essentials: open, edit, save, and close files in a clean native interface, with support for Light, Dark, and Matrix modes.
+A minimal plain-text editor for macOS, built with SwiftUI, with Light, Dark, and ![Matrix modes](https://img.shields.io/badge/and%20Matrix%20modes-00FF66?style=flat-square&labelColor=000000)
 
-This project is intentionally simple. The goal is to create a lightweight text editor that feels fast, readable, and a little fun, without unnecessary complexity or bloated features.
+SimpleTextEditor is a lightweight, native macOS text editor focused on the essentials. It is built for fast, distraction-free plain-text editing, with a clean interface and a bit of personality through built-in theme support, including a Matrix-inspired mode.
 
 ## Features
 
@@ -17,6 +17,19 @@ This project is intentionally simple. The goal is to create a lightweight text e
 - Dark mode
 - Matrix mode
 
+## Installation
+
+### Option 1: Download the app
+- Download `SimpleTextEditor.app`
+- Move it to your `Applications` folder
+- Open it like any other macOS app
+
+### Option 2: Build from source
+1. Open the project in Xcode
+2. Build and run the app
+3. Locate the generated `.app` file in Xcode’s build folder
+4. Move the app to your `Applications` folder if desired
+
 ## Built With
 
 - Swift
@@ -24,6 +37,17 @@ This project is intentionally simple. The goal is to create a lightweight text e
 - Xcode
 - macOS Document App architecture
 
-## Status
+## Project Status
 
-Early working version. Stable core editing experience first, with more polish and customization planned over time.
+Early working version. The core editor is functional and stable, with more polish and customization planned over time.
+
+## Roadmap
+
+- Improve theme polish
+- Add more editor customization
+- Explore better Matrix mode visuals
+- Consider future Windows support
+
+## License
+
+This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for details.
