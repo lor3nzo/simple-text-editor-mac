@@ -1,7 +1,6 @@
 # SimpleTextEditor
 
-A minimal plain-text editor for macOS, built with SwiftUI, with Light, Dark, and <img src="https://img.shields.io/badge/and%20Matrix%20modes-00FF66?style=flat-square&labelColor=000000" alt="and Matrix modes" />
-
+A minimal plain-text editor for macOS, built with SwiftUI, with Light, Dark, and <img src="https://img.shields.io/badge/and%20Matrix%20modes-000000?style=flat-square&labelColor=000000&logoColor=00FF66" alt="and Matrix modes" />
 SimpleTextEditor is a lightweight, native macOS text editor focused on the essentials. It is built for fast, distraction-free plain-text editing, with a clean interface and a bit of personality through built-in theme support, including a Matrix-inspired mode.
 
 ## Features
