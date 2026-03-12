@@ -1,10 +1,11 @@
 import SwiftUI
 import AppKit
 import UniformTypeIdentifiers
+import OSLog
 
 struct ContentView: View {
     @Binding var document: TextDocument
-    @AppStorage("editorTheme") private var editorThemeRaw = EditorTheme.system.rawValue
+    @AppStorage(Preferences.Keys.editorTheme) private var editorThemeRaw = Preferences.Defaults.editorTheme
 
     @Environment(\.newDocument) private var newDocument
 
@@ -30,18 +31,18 @@ struct ContentView: View {
                 Button {
                     newDocument(contentType: UTType.plainText)
                 } label: {
-                    Label("New", systemImage: "doc.badge.plus")
+                    Label(String(localized: "New"), systemImage: "doc.badge.plus")
                 }
 
                 Button {
                     NSDocumentController.shared.openDocument(nil)
                 } label: {
-                    Label("Open", systemImage: "folder")
+                    Label(String(localized: "Open"), systemImage: "folder")
                 }
 
-                Picker("", selection: $editorThemeRaw) {
+                Picker(String(localized: "Theme"), selection: $editorThemeRaw) {
                     ForEach(EditorTheme.allCases) { mode in
-                        Text(mode.rawValue).tag(mode.rawValue)
+                        Text(mode.localizedName).tag(mode.rawValue)
                     }
                 }
                 .labelsHidden()
@@ -61,12 +62,12 @@ struct ContentView: View {
 
     private func applyEditorAppearance(for theme: EditorTheme) {
         guard let window = NSApp.keyWindow else {
-            print("[SimpleTextEditor] applyEditorAppearance: no key window available")
+            Logger.ui.warning("applyEditorAppearance: no key window available")
             return
         }
         guard let scrollView = findScrollView(in: window.contentView),
               let textView = scrollView.documentView as? NSTextView else {
-            print("[SimpleTextEditor] applyEditorAppearance: could not locate NSTextView")
+            Logger.ui.warning("applyEditorAppearance: could not locate NSTextView")
             return
         }
 
@@ -89,6 +90,8 @@ struct ContentView: View {
                 .foregroundColor: NSColor.selectedTextColor
             ]
         }
+
+        Logger.theme.info("Applied appearance for theme: \(theme.rawValue)")
     }
 
     private func findScrollView(in view: NSView?, depth: Int = 0) -> NSScrollView? {
