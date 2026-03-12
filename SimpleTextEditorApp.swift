@@ -2,7 +2,11 @@ import SwiftUI
 
 @main
 struct SimpleTextEditorApp: App {
-    @AppStorage("editorTheme") private var editorThemeRaw = EditorTheme.system.rawValue
+
+    init() {
+        // Run preference migration before any view is loaded
+        Preferences.migrateIfNeeded()
+    }
 
     var body: some Scene {
         DocumentGroup(newDocument: TextDocument()) { file in
