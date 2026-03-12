@@ -7,11 +7,9 @@ struct ViewMenuCommands: Commands {
         CommandGroup(after: .toolbar) {
             Divider()
 
-            Menu("Theme") {
-                Picker("Theme", selection: $editorThemeRaw) {
-                    ForEach(EditorTheme.allCases) { mode in
-                        Text(mode.rawValue).tag(mode.rawValue)
-                    }
+            Picker("Theme", selection: $editorThemeRaw) {
+                ForEach(EditorTheme.allCases) { mode in
+                    Text(mode.rawValue).tag(mode.rawValue)
                 }
             }
         }
