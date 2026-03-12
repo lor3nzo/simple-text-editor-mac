@@ -1,6 +1,20 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+enum DocumentError: LocalizedError {
+    case encodingFailed
+    case decodingFailed
+
+    var errorDescription: String? {
+        switch self {
+        case .encodingFailed:
+            return "The document could not be saved because the text could not be encoded. Your previous file has not been modified."
+        case .decodingFailed:
+            return "The file could not be opened because it contains unreadable content."
+        }
+    }
+}
+
 struct TextDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.plainText] }
 
@@ -11,16 +25,19 @@ struct TextDocument: FileDocument {
     }
 
     init(configuration: ReadConfiguration) throws {
-        if let data = configuration.file.regularFileContents,
-           let string = String(data: data, encoding: .utf8) {
-            self.text = string
-        } else {
-            self.text = ""
+        guard let data = configuration.file.regularFileContents else {
+            throw DocumentError.decodingFailed
         }
+        guard let string = String(data: data, encoding: .utf8) else {
+            throw DocumentError.decodingFailed
+        }
+        self.text = string
     }
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = text.data(using: .utf8) ?? Data()
+        guard let data = text.data(using: .utf8) else {
+            throw DocumentError.encodingFailed
+        }
         return FileWrapper(regularFileWithContents: data)
     }
 }
