@@ -3,12 +3,18 @@ import AppKit
 
 enum EditorTheme: String, CaseIterable, Identifiable {
     case system = "System"
-    case light = "Light"
-    case dark = "Dark"
+    case light  = "Light"
+    case dark   = "Dark"
     case matrix = "Matrix"
 
     var id: String { rawValue }
 
+    // MARK: Localization
+    var localizedName: String {
+        String(localized: String.LocalizationValue(rawValue))
+    }
+
+    // MARK: Colors
     var textColor: Color {
         switch self {
         case .matrix:
@@ -27,6 +33,7 @@ enum EditorTheme: String, CaseIterable, Identifiable {
         }
     }
 
+    // MARK: Appearance
     func applyAppAppearance() {
         switch self {
         case .system:
