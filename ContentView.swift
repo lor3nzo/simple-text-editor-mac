@@ -1,9 +1,12 @@
 import SwiftUI
 import AppKit
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @Binding var document: TextDocument
     @AppStorage("editorTheme") private var editorThemeRaw = EditorTheme.system.rawValue
+
+    @Environment(\.newDocument) private var newDocument
 
     private var theme: EditorTheme {
         EditorTheme(rawValue: editorThemeRaw) ?? .system
@@ -25,7 +28,7 @@ struct ContentView: View {
         .toolbar {
             ToolbarItemGroup {
                 Button {
-                    NSDocumentController.shared.newDocument(nil)
+                    newDocument(contentType: UTType.plainText)
                 } label: {
                     Label("New", systemImage: "doc.badge.plus")
                 }
@@ -36,55 +39,47 @@ struct ContentView: View {
                     Label("Open", systemImage: "folder")
                 }
 
-                Menu {
-                    Picker("Theme", selection: $editorThemeRaw) {
-                        ForEach(EditorTheme.allCases) { mode in
-                            Text(mode.rawValue).tag(mode.rawValue)
-                        }
+                Picker("", selection: $editorThemeRaw) {
+                    ForEach(EditorTheme.allCases) { mode in
+                        Text(mode.rawValue).tag(mode.rawValue)
                     }
-                } label: {
-                    Text("Theme: \(theme.rawValue)")
                 }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 110)
             }
         }
         .onAppear {
             theme.applyAppAppearance()
-            DispatchQueue.main.async {
-                applyEditorAppearance(for: theme)
-            }
+            applyEditorAppearance(for: theme)
         }
         .onChange(of: editorThemeRaw) { _ in
             theme.applyAppAppearance()
-            DispatchQueue.main.async {
-                applyEditorAppearance(for: theme)
-            }
+            applyEditorAppearance(for: theme)
         }
     }
 
     private func applyEditorAppearance(for theme: EditorTheme) {
-        guard let window = NSApp.keyWindow,
-              let scrollView = findScrollView(in: window.contentView),
-              let textView = scrollView.documentView as? NSTextView else { return }
+        guard let window = NSApp.keyWindow else {
+            print("[SimpleTextEditor] applyEditorAppearance: no key window available")
+            return
+        }
+        guard let scrollView = findScrollView(in: window.contentView),
+              let textView = scrollView.documentView as? NSTextView else {
+            print("[SimpleTextEditor] applyEditorAppearance: could not locate NSTextView")
+            return
+        }
 
         if theme == .matrix {
             textView.insertionPointColor = NSColor(
-                calibratedRed: 0.40,
-                green: 1.0,
-                blue: 0.55,
-                alpha: 1.0
+                calibratedRed: 0.40, green: 1.0, blue: 0.55, alpha: 1.0
             )
             textView.selectedTextAttributes = [
                 .backgroundColor: NSColor(
-                    calibratedRed: 0.10,
-                    green: 0.35,
-                    blue: 0.10,
-                    alpha: 1.0
+                    calibratedRed: 0.10, green: 0.35, blue: 0.10, alpha: 1.0
                 ),
                 .foregroundColor: NSColor(
-                    calibratedRed: 0.75,
-                    green: 1.0,
-                    blue: 0.80,
-                    alpha: 1.0
+                    calibratedRed: 0.75, green: 1.0, blue: 0.80, alpha: 1.0
                 )
             ]
         } else {
@@ -96,19 +91,14 @@ struct ContentView: View {
         }
     }
 
-    private func findScrollView(in view: NSView?) -> NSScrollView? {
-        guard let view else { return nil }
-
-        if let scrollView = view as? NSScrollView {
-            return scrollView
-        }
-
+    private func findScrollView(in view: NSView?, depth: Int = 0) -> NSScrollView? {
+        guard let view, depth < 20 else { return nil }
+        if let scrollView = view as? NSScrollView { return scrollView }
         for subview in view.subviews {
-            if let found = findScrollView(in: subview) {
+            if let found = findScrollView(in: subview, depth: depth + 1) {
                 return found
             }
         }
-
         return nil
     }
 }
