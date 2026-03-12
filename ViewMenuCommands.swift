@@ -1,15 +1,15 @@
 import SwiftUI
 
 struct ViewMenuCommands: Commands {
-    @AppStorage("editorTheme") private var editorThemeRaw = EditorTheme.system.rawValue
+    @AppStorage(Preferences.Keys.editorTheme) private var editorThemeRaw = Preferences.Defaults.editorTheme
 
     var body: some Commands {
         CommandGroup(after: .toolbar) {
             Divider()
 
-            Picker("Theme", selection: $editorThemeRaw) {
+            Picker(String(localized: "Theme"), selection: $editorThemeRaw) {
                 ForEach(EditorTheme.allCases) { mode in
-                    Text(mode.rawValue).tag(mode.rawValue)
+                    Text(mode.localizedName).tag(mode.rawValue)
                 }
             }
         }
