@@ -10,16 +10,18 @@ Built with SwiftUI and AppKit as a learning project.
 
 - Plain text editing with monospaced font
 - Four themes: System, Light, Dark, Matrix
+- Native find and replace (Cmd+F, Cmd+Option+F)
 - Native macOS document model — autosave, versioning, and recovery built in
 - `.txt` file association and Open With support
 - Encoding support: UTF-8, UTF-16, ASCII, ISO Latin-1
 - Actionable error alerts on read/write failures
+- OSLog-based internal logging (visible in Console.app)
 
 ---
 
 ## Requirements
 
-- macOS 13 Ventura or later
+- macOS 14 Sonoma or later
 - Xcode 15 or later
 
 ---
@@ -43,10 +45,11 @@ No external dependencies. No package manager required.
 ```
 SimpleTextEditor/
 ├── SimpleTextEditorApp.swift       # App entry point, preference migration
-├── ContentView.swift               # Main editor view, toolbar, theme application
+├── ContentView.swift               # Main editor view and toolbar
+├── EditorView.swift                # NSViewRepresentable wrapping NSTextView
 ├── SimpleTextEditorDocument.swift  # FileDocument model, read/write, encoding
 ├── EditorTheme.swift               # Theme definitions and appearance logic
-├── ViewMenuCommands.swift          # View menu theme picker
+├── ViewMenuCommands.swift          # Find and View menu commands
 ├── AppLogger.swift                 # Centralized OSLog logging
 ├── Preferences.swift               # AppStorage keys, defaults, migration
 ├── SimpleTextEditorTests/
@@ -54,6 +57,23 @@ SimpleTextEditor/
 └── SimpleTextEditorUITests/
     └── SimpleTextEditorUITests.swift # UI tests: launch, edit, save, theme
 ```
+
+---
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| Cmd+N | New document |
+| Cmd+O | Open file |
+| Cmd+S | Save |
+| Cmd+Shift+S | Save As |
+| Cmd+W | Close window |
+| Cmd+Q | Quit |
+| Cmd+Z / Cmd+Shift+Z | Undo / Redo |
+| Cmd+F | Find |
+| Cmd+Option+F | Find and Replace |
+| Cmd+G / Cmd+Shift+G | Find Next / Find Previous |
 
 ---
 
@@ -66,13 +86,6 @@ SimpleTextEditor/
 
 ---
 
-## Known Limitations
-
-- Files over ~2MB may open slowly. Optimized for typical plain text files under 500KB.
-- Not signed or notarized — personal use only, not distributed.
-
----
-
 ## Themes
 
 | Theme | Description |
@@ -81,6 +94,13 @@ SimpleTextEditor/
 | Light | Forces light appearance |
 | Dark | Forces dark appearance |
 | Matrix | Black background, green text |
+
+---
+
+## Known Limitations
+
+- Files over ~2MB may open slowly. Optimized for typical plain text files under 500KB.
+- Not signed or notarized — personal use only, not distributed.
 
 ---
 
