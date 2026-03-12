@@ -1,53 +1,89 @@
 # SimpleTextEditor
 
-A minimal plain-text editor for macOS, built with SwiftUI, with Light, Dark, and <img src="docs/matrix-badge.svg" alt="and Matrix modes" />
+A minimal, fast, plain text editor for macOS. Opens and saves `.txt` files. Nothing more.
 
-SimpleTextEditor is a lightweight, native macOS text editor focused on the essentials. It is built for fast, distraction-free plain-text editing, with a clean interface and a bit of personality through built-in theme support, including a Matrix-inspired mode.
+Built with SwiftUI and AppKit as a learning project.
+
+---
 
 ## Features
 
-- Plain-text editing
-- Open files
-- Save files
-- Save As
-- Close documents
-- Standard edit actions
-- Native macOS window behavior
-- Light mode
-- Dark mode
-- Matrix mode
+- Plain text editing with monospaced font
+- Four themes: System, Light, Dark, Matrix
+- Native macOS document model — autosave, versioning, and recovery built in
+- `.txt` file association and Open With support
+- Encoding support: UTF-8, UTF-16, ASCII, ISO Latin-1
+- Actionable error alerts on read/write failures
 
-## Installation
+---
 
-### Option 1: Download the app
-- Download `SimpleTextEditor.app`
-- Move it to your `Applications` folder
-- Open it like any other macOS app
+## Requirements
 
-### Option 2: Build from source
-1. Open the project in Xcode
-2. Build and run the app
-3. Locate the generated `.app` file in Xcode’s build folder
-4. Move the app to your `Applications` folder if desired
+- macOS 13 Ventura or later
+- Xcode 15 or later
 
-## Built With
+---
 
-- Swift
-- SwiftUI
-- Xcode
-- macOS Document App architecture
+## Build and Run
 
-## Project Status
+```bash
+git clone https://github.com/your-username/SimpleTextEditor.git
+cd SimpleTextEditor
+open SimpleTextEditor.xcodeproj
+```
 
-Early working version. The core editor is functional and stable, with more polish and customization planned over time.
+Then hit **Cmd+R** in Xcode to build and run.
 
-## Roadmap
+No external dependencies. No package manager required.
 
-- Improve theme polish
-- Add more editor customization
-- Explore better Matrix mode visuals
-- Consider future Windows support
+---
+
+## Project Structure
+
+```
+SimpleTextEditor/
+├── SimpleTextEditorApp.swift       # App entry point, preference migration
+├── ContentView.swift               # Main editor view, toolbar, theme application
+├── SimpleTextEditorDocument.swift  # FileDocument model, read/write, encoding
+├── EditorTheme.swift               # Theme definitions and appearance logic
+├── ViewMenuCommands.swift          # View menu theme picker
+├── AppLogger.swift                 # Centralized OSLog logging
+├── Preferences.swift               # AppStorage keys, defaults, migration
+├── SimpleTextEditorTests/
+│   └── SimpleTextEditorTests.swift # Unit tests: document model, theme
+└── SimpleTextEditorUITests/
+    └── SimpleTextEditorUITests.swift # UI tests: launch, edit, save, theme
+```
+
+---
+
+## Running Tests
+
+**Cmd+U** in Xcode runs the full test suite.
+
+- Unit tests cover document encoding, decoding, error handling, and theme logic
+- UI tests cover launch, text editing, new document, theme switching, save, and close
+
+---
+
+## Known Limitations
+
+- Files over ~2MB may open slowly. Optimized for typical plain text files under 500KB.
+- Not signed or notarized — personal use only, not distributed.
+
+---
+
+## Themes
+
+| Theme | Description |
+|---|---|
+| System | Follows macOS Light/Dark mode setting |
+| Light | Forces light appearance |
+| Dark | Forces dark appearance |
+| Matrix | Black background, green text |
+
+---
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for details.
+MIT
